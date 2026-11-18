@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AES.cpp" />
+    <ClCompile Include="cApp.cpp" />
+    <ClCompile Include="cMain.cpp" />
+    <ClCompile Include="hikvision.cpp" />
+    <ClCompile Include="preview.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AES.h" />
+    <ClInclude Include="cApp.h" />
+    <ClInclude Include="cMain.h" />
+    <ClInclude Include="hikvision.h" />
+    <ClInclude Include="preview.h" />
+    <ClInclude Include="localization.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{EA0EE2B3-7171-47C3-A348-9F5ADC1D9F8F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>hikvisiondecrypter</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset Condition="'$(PlatformToolset)'==''">v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <!-- resources/app.rc embeds the themed, DPI-aware manifest. -->
+    <GenerateManifest>false</GenerateManifest>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
+    <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="Exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(WXWIN)\wxwidgets.props" Condition="Exists('$(WXWIN)\wxwidgets.props')" />
+  </ImportGroup>
+  <Target Name="RequireWxSdk" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(WXWIN)\wxwidgets.props')" Text="Set WXWIN to the wxWidgets 3.2.12+ SDK directory, or build with CMake." />
+  </Target>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <Target Name="CopyWxRuntime" AfterTargets="Build" Condition="'$(wxUsingDll)'!=''">
+    <ItemGroup>
+      <WxRuntime Include="$(wxLibOrDllDir)\wxbase*$(wxSuffix)_vc*.dll;$(wxLibOrDllDir)\wxmsw*$(wxSuffix)_core_vc*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(WxRuntime)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <ItemGroup>
+    <ResourceCompile Include="..\resources\app.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
